@@ -6,7 +6,7 @@
 
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
   </head>
   <body>
     <div class="container">
@@ -87,9 +87,10 @@
 
         {% for capture in captures if capture.extension in ['avi'] and (capture.filename starts with 'M') %}
           <div class="col-lg-4" style="margin-bottom: 1em;">
-            <video controls width="360" height="243">
-              <source src="{{ capture['path'] }}" type="video/mp4">
-            </video>
+            <a href="{{ capture['path'] }}" target="_blank">
+              <i class="glyphicon glyphicon-film" style="font-size: 1000% !important; line-height: 243px;"></i>
+            </a>
+            <br>
             <span>
               <b>{{ capture['filename'] }}</b>
             </span>
@@ -102,9 +103,9 @@
       </div>
 
       <div class="row">
-        <h3>GMN - Empilhamentos</h3>
+        <h3>GMN - Fotos</h3>
 
-        {% for capture in captures if capture.extension in ['jpg'] and capture.filename ends with 'meteors' %}
+        {% for capture in captures if capture.extension in ['jpg', 'gif'] and capture.filename ends with 'fits_maxpixel' %}
           <div class="col-lg-4" style="margin-bottom: 1em;">
             <a href="{{ capture['path'] }}" target="_blank">
               <img src="{{ capture['path'] }}" class="img img-thumbnail img-responsive" title="{{ capture['filename'] }}">
@@ -121,9 +122,9 @@
       </div>
 
       <div class="row">
-        <h3>GMN - Fotos</h3>
+        <h3>GMN - Empilhamentos</h3>
 
-        {% for capture in captures if capture.extension in ['jpg', 'gif'] and capture.filename ends with 'fits_maxpixel' %}
+        {% for capture in captures if capture.extension in ['jpg'] and capture.filename ends with 'meteors' %}
           <div class="col-lg-4" style="margin-bottom: 1em;">
             <a href="{{ capture['path'] }}" target="_blank">
               <img src="{{ capture['path'] }}" class="img img-thumbnail img-responsive" title="{{ capture['filename'] }}">
