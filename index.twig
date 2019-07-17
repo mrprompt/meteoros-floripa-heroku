@@ -56,7 +56,7 @@
           </fieldset>
 
           <div class="text-center">
-            <input type="submit" value="Enviar" class="btn btn-default right">
+            <input type="submit" value="Enviar" class="btn btn-default">
           </div>
         </form>
       </div>
@@ -72,6 +72,10 @@
             <span>
               <b>{{ capture['filename'] }}</b>
             </span>
+          </div>
+        {% else %}
+          <div class="alert alert-warning">
+            Sem capturas para a data.
           </div>
         {% endfor %}
       </div>
