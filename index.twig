@@ -63,8 +63,67 @@
 
       <hr class="clearfix">
 
-      <div class="row">        
-        {% for capture in captures if capture.extension in ['jpg', 'avi'] and ((capture.filename starts with 'M' and capture.filename ends with 'P') or (capture.filename ends with 'meteors')) %}
+      <div class="row">
+        <h3>BRAMON - Fotos</h3>
+
+        {% for capture in captures if capture.extension in ['jpg'] and (capture.filename starts with 'M' and capture.filename ends with 'P') %}
+          <div class="col-lg-4" style="margin-bottom: 1em;">
+            <a href="{{ capture['path'] }}" target="_blank">
+              <img src="{{ capture['path'] }}" class="img img-thumbnail img-responsive" title="{{ capture['filename'] }}">
+            </a>
+            <span>
+              <b>{{ capture['filename'] }}</b>
+            </span>
+          </div>
+        {% else %}
+          <div class="alert alert-warning">
+            Sem capturas para a data.
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="row">
+        <h3>BRAMON - Vídeos</h3>
+
+        {% for capture in captures if capture.extension in ['avi'] and (capture.filename starts with 'M') %}
+          <div class="col-lg-4" style="margin-bottom: 1em;">
+            <video controls width="360" height="243">
+              <source src="{{ capture['path'] }}" type="video/mp4">
+            </video>
+            <span>
+              <b>{{ capture['filename'] }}</b>
+            </span>
+          </div>
+        {% else %}
+          <div class="alert alert-warning">
+            Sem capturas para a data.
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="row">
+        <h3>GMN - Empilhamentos</h3>
+
+        {% for capture in captures if capture.extension in ['jpg'] and capture.filename ends with 'meteors' %}
+          <div class="col-lg-4" style="margin-bottom: 1em;">
+            <a href="{{ capture['path'] }}" target="_blank">
+              <img src="{{ capture['path'] }}" class="img img-thumbnail img-responsive" title="{{ capture['filename'] }}">
+            </a>
+            <span>
+              <b>{{ capture['filename'] }}</b>
+            </span>
+          </div>
+        {% else %}
+          <div class="alert alert-warning">
+            Sem capturas para a data.
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="row">
+        <h3>GMN - Fotos</h3>
+
+        {% for capture in captures if capture.extension in ['jpg', 'gif'] and capture.filename ends with 'fits_maxpixel' %}
           <div class="col-lg-4" style="margin-bottom: 1em;">
             <a href="{{ capture['path'] }}" target="_blank">
               <img src="{{ capture['path'] }}" class="img img-thumbnail img-responsive" title="{{ capture['filename'] }}">
@@ -81,7 +140,7 @@
       </div>
     </div>
 
-    <script src="//code.jquery.com/jquery-2.2.1.min.js" 
+    <script src="//code.jquery.com/jquery-2.2.1.min.js"
             integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00=" 
             crossorigin="anonymous"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" 
