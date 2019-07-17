@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Meteoros - Capturas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <h2>Capturas - Florianópolis, SC</h2>
+
+        <form method="GET" id="searchForm">
+          <label for="data">
+              Data
+              <input 
+                type="date" 
+                name="date" 
+                id="date" 
+                value="{{ _get['date'] }}"
+                required="required">
+          </label>
+
+          <hr>
+
+          {% for station in stations %}
+            <label for="station_{{ station }}" class="col-lg-2">
+              <input 
+                type="checkbox" 
+                name="station[]" 
+                id="station_{{ station }}" 
+                value="{{ station }}" {{ station in _get['station'] ? 'checked="checked"' : '' }}>
+
+              {{ station }}
+            </label>
+          {% endfor %}
+
+          <hr>
+
+          <input type="submit" value="Enviar" class="btn btn-default">
+        </form>
+      </div>
+
+      <hr class="clearfix">
+
+      <div class="row">        
+        {% for capture in captures %}
+          {% if capture['extension'] == 'jpg' and capture['filename'] starts with 'M' and capture['filename'] ends with 'P' %}
+            <div class="col-lg-4" style="margin-bottom: 1em;">
+              <img src="{{ capture['path'] }}" class="img img-thumbnail img-responsive" title="{{ capture['filename'] }}">
+
+              {{ capture['filename'] }}
+            </div>
+          {% endif %}
+
+          {% if capture['extension'] == 'jpg' and capture['filename'] ends with 'meteors' %}
+            <div class="col-lg-4" style="margin-bottom: 1em;">
+              <img src="{{ capture['path'] }}" class="img img-thumbnail img-responsive" title="{{ capture['filename'] }}">
+
+              {{ capture['filename'] }}
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+
+    <script src="//code.jquery.com/jquery-2.2.1.min.js" 
+            integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00=" 
+            crossorigin="anonymous"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" 
+            integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" 
+            crossorigin="anonymous"></script>
+  </body>
+</html>
