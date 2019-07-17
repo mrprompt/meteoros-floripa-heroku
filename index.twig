@@ -11,58 +11,68 @@
   <body>
     <div class="container">
       <div class="row">
-        <h2>Capturas - Florianópolis, SC</h2>
+        <div class="form col-lg-12">
+          <div class="col-lg-2">
+            <img src="https://bramon.s3-sa-east-1.amazonaws.com/logo-tlp-sc-transp.png" alt="Logo TLP/SC" class="img-rounded" style="height: 180px !important;">
+          </div>
 
-        <form method="GET" id="searchForm">
-          <label for="data">
-              Data
-              <input 
-                type="date" 
-                name="date" 
-                id="date" 
-                value="{{ _get['date'] }}"
-                required="required">
-          </label>
+          <div class="col-lg-10">
+            <h2>Capturas - Florianópolis, SC</h2>
+          </div>
+        </div>
 
-          <hr>
+        <form method="GET" id="searchForm" class="form col-lg-12">
+          <fieldset class="col-lg-2">
+            <legend>Data</legend>
 
-          {% for station in stations %}
-            <label for="station_{{ station }}" class="col-lg-2">
-              <input 
-                type="checkbox" 
-                name="station[]" 
-                id="station_{{ station }}" 
-                value="{{ station }}" {{ station in _get['station'] ? 'checked="checked"' : '' }}>
-
-              {{ station }}
+            <label for="data">
+                Data da captura
+                <input
+                  type="date"
+                  name="date"
+                  id="date"
+                  value="{{ _get['date'] }}"
+                  required="required"
+                  class="form-control">
             </label>
-          {% endfor %}
+          </fieldset>
 
-          <hr>
+          <fieldset class="col-lg-10">
+            <legend>Estação</legend>
 
-          <input type="submit" value="Enviar" class="btn btn-default">
+            {% for station in stations %}
+              <div class="col-lg-2">
+                <label for="station_{{ station }}">
+                  <input
+                    type="checkbox"
+                    name="station[]"
+                    id="station_{{ station }}"
+                    value="{{ station }}"
+                    {{ station in _get['station'] ? 'checked="checked"' : '' }}>
+                  {{ station }}
+                </label>
+              </div>
+            {% endfor %}
+          </fieldset>
+
+          <div class="text-center">
+            <input type="submit" value="Enviar" class="btn btn-default right">
+          </div>
         </form>
       </div>
 
       <hr class="clearfix">
 
       <div class="row">        
-        {% for capture in captures %}
-          {% if capture['extension'] == 'jpg' and capture['filename'] starts with 'M' and capture['filename'] ends with 'P' %}
-            <div class="col-lg-4" style="margin-bottom: 1em;">
+        {% for capture in captures if capture.extension in ['jpg', 'avi'] and ((capture.filename starts with 'M' and capture.filename ends with 'P') or (capture.filename ends with 'meteors')) %}
+          <div class="col-lg-4" style="margin-bottom: 1em;">
+            <a href="{{ capture['path'] }}" target="_blank">
               <img src="{{ capture['path'] }}" class="img img-thumbnail img-responsive" title="{{ capture['filename'] }}">
-
-              {{ capture['filename'] }}
-            </div>
-          {% endif %}
-
-          {% if capture['extension'] == 'jpg' and capture['filename'] ends with 'meteors' %}
-            <div class="col-lg-4" style="margin-bottom: 1em;">
-              <img src="{{ capture['path'] }}" class="img img-thumbnail img-responsive" title="{{ capture['filename'] }}">
-
-              {{ capture['filename'] }}
-            </div>
-          {% endif %}
+            </a>
+            <span>
+              <b>{{ capture['filename'] }}</b>
+            </span>
+          </div>
         {% endfor %}
       </div>
     </div>

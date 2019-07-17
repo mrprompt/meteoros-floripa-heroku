@@ -1,4 +1,9 @@
 <?php
+/**
+ * List captures files stored in S3 from GMN and BRAMON stations.
+ *
+ * @author Thiago Paes <mrprompt@gmail.com>
+ */
 require __DIR__ . '/vendor/autoload.php';
 
 use Aws\S3\S3Client;
@@ -35,7 +40,7 @@ $recursive = true;
 $path = '/';
 $contents = [];
 
-foreach ($_GET['station'] as $station) {
+foreach ($_GET['station'] ?? [] as $station) {
     $date = DateTime::createFromFormat('Y-m-d', $_GET['date']);
 
     // BRAMON
