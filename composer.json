@@ -1,6 +1,8 @@
 {
-    "name": "mrprompt/meteoros",
+    "name": "mrprompt/meteoros-floripa",
+    "description": "Página para listar as capturas das estações BRAMON e GMN de Florianópolis.",
     "type": "project",
+    "license": "MIT",
     "require": {
         "league/flysystem-aws-s3-v3": "^1.0",
         "league/flysystem": "^1.0",
@@ -14,5 +16,10 @@
             "name": "Thiago Paes",
             "email": "mrprompt@gmail.com"
         }
-    ]
+    ],
+    "scripts": {
+        "post-root-package-install": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ]
+    }
 }
