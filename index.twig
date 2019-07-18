@@ -84,7 +84,7 @@
       <div class="row">
         <h3>BRAMON - Vídeos</h3>
 
-        {% for capture in captures if capture.extension in ['mp4'] and (capture.filename starts with 'M') %}
+        {% for capture in captures if capture.extension in ['mp4'] %}
           <div class="col-lg-4" style="margin-bottom: 1em;">
             <video controls width="360" height="243">
               <source src="{{ capture['path'] }}" type="video/mp4">
