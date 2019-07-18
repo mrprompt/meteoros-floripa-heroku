@@ -9,138 +9,144 @@
   </head>
   <body>
     <div class="container">
-      <div class="row">
-        <div class="form col-lg-12">
+      <header style="margin-bottom: 2em;">
+        <div class="row">
           <div class="col-lg-2">
             <img src="https://bramon.s3-sa-east-1.amazonaws.com/logo-tlp-sc-transp.png" alt="Logo TLP/SC" class="img-rounded" style="height: 180px !important;">
           </div>
 
-          <div class="col-lg-10">
-            <h2>Capturas - Florianópolis, SC</h2>
+          <div class="col-lg-5">
+            <dl class="dl-horizontal">
+              <dt>Câmeras:</dt>
+              <dd>SAMSUNG SCB-2000</dd>
 
-            <b>Câmeras:</b> SAMSUNG SCB-2000 <br>
-            <b>Lentes:</b> Megapixel 4mm F1.0 & Fujimon 2.8mm-8mm F0.95 <br>
-            <b>Lat. / Long.:</b> -27.5904 / -48.5925
+              <dt>Lentes:</dt>
+              <dd>Megapixel 4mm F1.0</dd>
+              <dd>Fujimon 2.8mm-8mm F0.95</dd>
+            </dl>
+          </div>
+
+          <div class="col-lg-5">
+              <dl class="dl-horizontal">
+                <dt>Latitude:</dt>
+                <dd>-27.5904</dd>
+
+                <dt>Longitude</dt>
+                <dd>-48.5925</dd>
+
+                <dt>Projetos:</dt>
+                <dd><a href="http://bramonmeteor.org/bramon/" title="Brazilian Meteor Observation Network" target="_blank">BRAMON</a></dd>
+                <dd><a href="https://globalmeteornetwork.org" title="Global Meteor Network" target="_blank">GMN</a></dd>
+              </dl>
           </div>
         </div>
+      </header>
 
-        <form method="GET" id="searchForm" class="form col-lg-12">
-          <fieldset class="col-lg-2">
-            <legend>Data</legend>
-
-            <label for="data">
-                Data da captura
-                <input
-                  type="date"
-                  name="date"
-                  id="date"
-                  value="{{ _get['date'] }}"
-                  required="required"
-                  class="form-control">
-            </label>
-          </fieldset>
-
-          <fieldset class="col-lg-10">
-            <legend>Estação</legend>
-
-            {% for station in stations %}
-              <div class="col-lg-2">
-                <label for="station_{{ station }}">
-                  <input
-                    type="checkbox"
-                    name="station[]"
-                    id="station_{{ station }}"
-                    value="{{ station }}"
-                    {{ station in _get['station'] ? 'checked="checked"' : '' }}>
-                  {{ station }}
-                </label>
+      <main role="main">
+        <div class="row">
+          <div class="col-lg-2">
+            <form method="GET" id="searchForm" class="form" style="margin-top: 25px">
+              <div class="form-group">
+                <label for="data">Data da captura</label>
+                <input type="date" name="date" id="date" value="{{ _get['date'] }}" required="required" class="form-control">
               </div>
-            {% endfor %}
-          </fieldset>
 
-          <div class="text-center">
-            <input type="submit" value="Enviar" class="btn btn-default">
+              <h4>Estações</h4>
+
+              {% for station in stations %}
+              <div class="form-group">
+                <label for="station_{{ station }}">{{ station }}</label>
+                <input type="checkbox" name="station[]" id="station_{{ station }}" value="{{ station }}" {{ station in _get['station'] ? 'checked="checked"' : '' }}>
+              </div>
+              {% endfor %}
+
+              <div class="text-center">
+                <input type="submit" value="Enviar" class="btn btn-default">
+              </div>
+            </form>
           </div>
-        </form>
-      </div>
 
-      <hr class="clearfix">
+          <div class="col-lg-10">
+            <div class="row">
+              <h3>BRAMON - Fotos</h3>
 
-      <div class="row">
-        <h3>BRAMON - Fotos</h3>
+              {% for capture in captures if capture.extension in ['jpg'] and (capture.filename starts with 'M' and capture.filename ends with 'P') %}
+                <div class="col-lg-4" style="margin-bottom: 1em;">
+                  <a href="{{ capture['path'] }}" target="_blank">
+                    <img src="{{ capture['path'] }}" class="img img-thumbnail img-responsive" title="{{ capture['filename'] }}">
+                  </a>
+                  <span>
+                  <b>{{ capture['filename'] }}</b>
+                </span>
+                </div>
+              {% else %}
+                <div class="alert alert-warning">
+                  Sem capturas para a data.
+                </div>
+              {% endfor %}
+            </div>
 
-        {% for capture in captures if capture.extension in ['jpg'] and (capture.filename starts with 'M' and capture.filename ends with 'P') %}
-          <div class="col-lg-4" style="margin-bottom: 1em;">
-            <a href="{{ capture['path'] }}" target="_blank">
-              <img src="{{ capture['path'] }}" class="img img-thumbnail img-responsive" title="{{ capture['filename'] }}">
-            </a>
-            <span>
-              <b>{{ capture['filename'] }}</b>
-            </span>
+            <div class="row">
+              <h3>BRAMON - Vídeos</h3>
+
+              {% for capture in captures if capture.extension in ['mp4'] %}
+                <div class="col-lg-4" style="margin-bottom: 1em;">
+                  <video controls width="294" height="199">
+                    <source src="{{ capture['path'] }}" type="video/mp4">
+                  </video>
+                  <span>
+                  <b>{{ capture['filename'] | replace({'.avi': ''}) }}</b>
+                </span>
+                </div>
+              {% else %}
+                <div class="alert alert-warning">
+                  Sem capturas para a data.
+                </div>
+              {% endfor %}
+
+            </div>
+
+            <div class="row">
+              <h3>GMN - Fotos</h3>
+
+              {% for capture in captures if capture.extension in ['jpg', 'gif'] and capture.filename ends with 'fits_maxpixel' %}
+                <div class="col-lg-4" style="margin-bottom: 1em;">
+                  <a href="{{ capture['path'] }}" target="_blank">
+                    <img src="{{ capture['path'] }}" class="img img-thumbnail img-responsive" title="{{ capture['filename'] }}">
+                  </a>
+                  <span>
+                  <b>{{ capture['filename'] }}</b>
+                </span>
+                </div>
+              {% else %}
+                <div class="alert alert-warning">
+                  Sem capturas para a data.
+                </div>
+              {% endfor %}
+
+            </div>
+
+            <div class="row">
+              <h3>GMN - Empilhamentos</h3>
+
+              {% for capture in captures if capture.extension in ['jpg'] and capture.filename ends with 'meteors' %}
+                <div class="col-lg-4" style="margin-bottom: 1em;">
+                  <a href="{{ capture['path'] }}" target="_blank">
+                    <img src="{{ capture['path'] }}" class="img img-thumbnail img-responsive" title="{{ capture['filename'] }}">
+                  </a>
+                  <span>
+                  <b>{{ capture['filename'] }}</b>
+                </span>
+                </div>
+              {% else %}
+                <div class="alert alert-warning">
+                  Sem capturas para a data.
+                </div>
+              {% endfor %}
+            </div>
           </div>
-        {% else %}
-          <div class="alert alert-warning">
-            Sem capturas para a data.
-          </div>
-        {% endfor %}
-      </div>
-
-      <div class="row">
-        <h3>BRAMON - Vídeos</h3>
-
-        {% for capture in captures if capture.extension in ['mp4'] %}
-          <div class="col-lg-4" style="margin-bottom: 1em;">
-            <video controls width="360" height="243">
-              <source src="{{ capture['path'] }}" type="video/mp4">
-            </video>
-            <span>
-              <b>{{ capture['filename'] | replace({'.avi': ''}) }}</b>
-            </span>
-          </div>
-        {% else %}
-          <div class="alert alert-warning">
-            Sem capturas para a data.
-          </div>
-        {% endfor %}
-      </div>
-
-      <div class="row">
-        <h3>GMN - Fotos</h3>
-
-        {% for capture in captures if capture.extension in ['jpg', 'gif'] and capture.filename ends with 'fits_maxpixel' %}
-          <div class="col-lg-4" style="margin-bottom: 1em;">
-            <a href="{{ capture['path'] }}" target="_blank">
-              <img src="{{ capture['path'] }}" class="img img-thumbnail img-responsive" title="{{ capture['filename'] }}">
-            </a>
-            <span>
-              <b>{{ capture['filename'] }}</b>
-            </span>
-          </div>
-        {% else %}
-          <div class="alert alert-warning">
-            Sem capturas para a data.
-          </div>
-        {% endfor %}
-      </div>
-
-      <div class="row">
-        <h3>GMN - Empilhamentos</h3>
-
-        {% for capture in captures if capture.extension in ['jpg'] and capture.filename ends with 'meteors' %}
-          <div class="col-lg-4" style="margin-bottom: 1em;">
-            <a href="{{ capture['path'] }}" target="_blank">
-              <img src="{{ capture['path'] }}" class="img img-thumbnail img-responsive" title="{{ capture['filename'] }}">
-            </a>
-            <span>
-              <b>{{ capture['filename'] }}</b>
-            </span>
-          </div>
-        {% else %}
-          <div class="alert alert-warning">
-            Sem capturas para a data.
-          </div>
-        {% endfor %}
-      </div>
+        </div>
+      </main>
     </div>
 
     <script src="//code.jquery.com/jquery-2.2.1.min.js"
