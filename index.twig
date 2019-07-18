@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Meteoros - Capturas</title>
+    <title>TLP/SC Meteor  - BRAMON - GMN - Capturas</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
@@ -18,21 +18,24 @@
           <div class="col-lg-5">
             <dl class="dl-horizontal">
               <dt>Câmeras:</dt>
-              <dd>SAMSUNG SCB-2000</dd>
+              {%  for camera in cameras %}
+              <dd>{{  camera }}</dd>
+              {% endfor %}
 
               <dt>Lentes:</dt>
-              <dd>Megapixel 4mm F1.0</dd>
-              <dd>Fujimon 2.8mm-8mm F0.95</dd>
+              {% for len in lens %}
+              <dd>{{ len }}</dd>
+              {% endfor %}
             </dl>
           </div>
 
           <div class="col-lg-5">
               <dl class="dl-horizontal">
                 <dt>Latitude:</dt>
-                <dd>-27.5904</dd>
+                <dd>{{ lat }}</dd>
 
                 <dt>Longitude</dt>
-                <dd>-48.5925</dd>
+                <dd>{{ lng }}</dd>
 
                 <dt>Projetos:</dt>
                 <dd><a href="http://bramonmeteor.org/bramon/" title="Brazilian Meteor Observation Network" target="_blank">BRAMON</a></dd>
