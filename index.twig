@@ -90,7 +90,7 @@
               <source src="{{ capture['path'] }}" type="video/mp4">
             </video>
             <span>
-              <b>{{ capture['filename'] }}</b>
+              <b>{{ capture['filename'] | replace({'.avi': ''}) }}</b>
             </span>
           </div>
         {% else %}
