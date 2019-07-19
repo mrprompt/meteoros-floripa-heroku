@@ -41,6 +41,8 @@ echo "Pronto!"
 exit
 ```
 
+_Para o caso da BRAMON, não é necessário informar a estação, já que a estrutura de diretórios abaixo do !data já existe a separação por estação._
+
 ### RMS
 
 - Rode o *CMN Bin Viewer* e converta as capturas para o formato *jpeg*.
@@ -54,3 +56,5 @@ aws s3 sync . s3://bramon/BR0004/
 echo "Pronto!"
 exit
 ```
+
+_Substitua o BR0004 pelo identificador de sua estação, caso contrário, o script não encontrará os arquivos corretamente._
