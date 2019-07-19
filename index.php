@@ -20,6 +20,7 @@ $cameras = explode(',', $_ENV['CAMERAS']);
 $lenses = explode(',', $_ENV['LENS']);
 $lat = $_ENV['LAT'];
 $lng = $_ENV['LNG'];
+$logo = $_ENV['LOGO'];
 
 $client = new S3Client([
     'credentials' => [
@@ -85,5 +86,6 @@ echo $twig->render('index.twig', [
     'lat' => $lat,
     'lng' => $lng,
     'captures' => $contents,
+    'logo' => $logo,
     '_get' => $_GET
 ]);
