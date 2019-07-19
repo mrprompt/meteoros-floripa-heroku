@@ -38,7 +38,6 @@ cd c:\bramon\!data
 aws s3 sync . s3://bramon/
 
 echo "Pronto!"
-exit
 ```
 
 _Para o caso da BRAMON, não é necessário informar a estação, já que a estrutura de diretórios abaixo do !data já existe a separação por estação._
@@ -50,11 +49,11 @@ _Para o caso da BRAMON, não é necessário informar a estação, já que a estr
 ```
 #!/bin/bash
 
-cd ~/RMS_Data/Archived_files/
-aws s3 sync . s3://bramon/BR0004/
+cd ~/RMS_data/ArchivedFiles/
+aws s3 sync . s3://bramon/$HOSTNAME/
 
 echo "Pronto!"
-exit
 ```
 
-_Substitua o BR0004 pelo identificador de sua estação, caso contrário, o script não encontrará os arquivos corretamente._
+_Substitua o $HOSTNAME pelo identificador de sua estação - ou configure o hostname de sua máquina para o mesmo da estação -, 
+caso contrário, o script não encontrará os arquivos corretamente._
