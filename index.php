@@ -17,7 +17,7 @@ $dotenv->load(__DIR__.'/.env');
 
 $stations = explode(',', $_ENV['STATIONS']);
 $cameras = explode(',', $_ENV['CAMERAS']);
-$lens = explode(',', $_ENV['LENS']);
+$lenses = explode(',', $_ENV['LENS']);
 $lat = $_ENV['LAT'];
 $lng = $_ENV['LNG'];
 
@@ -81,7 +81,7 @@ $contents = array_map(function ($capture) use ($filesystem) {
 echo $twig->render('index.twig', [
     'stations' => $stations,
     'cameras' => $cameras,
-    'lens' => $lens,
+    'lenses' => $lenses,
     'lat' => $lat,
     'lng' => $lng,
     'captures' => $contents,
