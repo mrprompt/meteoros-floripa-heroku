@@ -3,21 +3,46 @@
   "description": "Listagem de capturas feitas pelas estações dos projetos BRAMON e GMN.",
   "repository": "https://github.com/mrprompt/meteoros-floripa",
   "keywords": ["meteor", "meteoros", "bramon", "brazilian", "meteor", "observation", "network", "gmn", "global"],
-  "addons": [
-    {
-      "plan": "heroku-postgresql",
-      "options": {
-        "version": "9.5"
-      }
-    }
-  ],
-  "scripts": {
-    "postdeploy": "./bin/console doctrine:schema:create"
-  },
   "env": {
-    "ENV": {
-      "description": "Application environment",
-      "value": "production"
+    "AWS_ACCESS_KEY_ID": {
+      "description": "AWS_ACCESS_KEY_ID",
+      "value": ""
+    },
+    "AWS_SECRET_ACCESS_KEY": {
+      "description": "AWS_SECRET_ACCESS_KEY",
+      "value": ""
+    },
+    "AWS_DEFAULT_REGION": {
+      "description": "AWS_DEFAULT_REGION",
+      "value": ""
+    },
+    "AWS_BUCKET": {
+      "description": "AWS_BUCKET",
+      "value": ""
+    },
+    "STATIONS": {
+      "description": "STATIONS",
+      "value": ""
+    },
+    "CAMERAS": {
+      "description": "CAMERAS",
+      "value": ""
+    },
+    "LENS": {
+      "description": "LENS",
+      "value": ""
+    },
+    "LAT": {
+      "description": "LATITUDE",
+      "value": ""
+    },
+    "LNG": {
+      "description": "LONGITUDE",
+      "value": ""
+    },
+    "LOGO": {
+      "description": "LOGO",
+      "value": ""
     }
   }
 }
