@@ -1,0 +1,23 @@
+{
+  "name": "meteoros-floripa",
+  "description": "Listagem de capturas feitas pelas estações dos projetos BRAMON e GMN.",
+  "repository": "https://github.com/mrprompt/meteoros-floripa",
+  "keywords": ["meteor", "meteoros", "bramon", "brazilian", "meteor", "observation", "network", "gmn", "global"],
+  "addons": [
+    {
+      "plan": "heroku-postgresql",
+      "options": {
+        "version": "9.5"
+      }
+    }
+  ],
+  "scripts": {
+    "postdeploy": "./bin/console doctrine:schema:create"
+  },
+  "env": {
+    "ENV": {
+      "description": "Application environment",
+      "value": "production"
+    }
+  }
+}
