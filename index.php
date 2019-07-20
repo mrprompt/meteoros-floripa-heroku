@@ -12,8 +12,12 @@ use League\Flysystem\AwsS3v3\AwsS3Adapter;
 use League\Flysystem\Filesystem;
 use Symfony\Component\Dotenv\Dotenv;
 
-$dotenv = new Dotenv();
-$dotenv->load(__DIR__.'/.env');
+try {
+    $dotenv = new Dotenv();
+    $dotenv->load(__DIR__.'/.env');
+} catch (\Symfony\Component\Dotenv\Exception\PathException $ex) {
+    // none :)
+}
 
 $stations = explode(',', $_ENV['STATIONS']);
 $cameras = explode(',', $_ENV['CAMERAS']);
