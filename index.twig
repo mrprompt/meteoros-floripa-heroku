@@ -89,7 +89,9 @@
 
           <div class="col-lg-10">
             <div class="row set-bramon">
-              <h3>BRAMON</h3>
+              <div class="col-lg-12">
+                <h3>BRAMON</h3>
+              </div>
 
               {% for capture in captures if capture.extension in ['jpg'] and (capture.filename starts with 'M' and capture.filename ends with 'P') %}
                 <div class="col-lg-4" style="margin-bottom: 1em;">
@@ -101,14 +103,18 @@
                 </span>
                 </div>
               {% else %}
+              <div class="col-lg-12">
                 <div class="alert alert-warning">
                   Sem capturas para a data.
                 </div>
+              </div>
               {% endfor %}
             </div>
 
             <div class="row set-gmn">
-              <h3>GMN</h3>
+              <div class="col-lg-12">
+                <h3>GMN</h3>
+              </div>
 
               {% for capture in captures if capture.extension in ['jpg', 'gif'] and capture.filename ends with 'fits_maxpixel' %}
                 <div class="col-lg-4" style="margin-bottom: 1em;">
@@ -120,9 +126,11 @@
                 </span>
                 </div>
               {% else %}
+              <div class="col-lg-12">
                 <div class="alert alert-warning">
                   Sem capturas para a data.
                 </div>
+              </div>
               {% endfor %}
             </div>
           </div>
