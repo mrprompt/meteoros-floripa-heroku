@@ -25,17 +25,19 @@ $lenses = explode(',', $_ENV['LENS']);
 $lat = $_ENV['LAT'];
 $lng = $_ENV['LNG'];
 $logo = $_ENV['LOGO'];
+$bucket = $_ENV['AWS_BUCKET'];
+$region = $_ENV['AWS_DEFAULT_REGION'];
 
 $client = new S3Client([
     'credentials' => [
         'key'    => $_ENV['AWS_ACCESS_KEY_ID'],
         'secret' => $_ENV['AWS_SECRET_ACCESS_KEY'],
     ],
-    'region' => $_ENV['AWS_DEFAULT_REGION'],
+    'region' => $region,
     'version' => 'latest',
 ]);
 
-$adapter = new AwsS3Adapter($client, $_ENV['AWS_BUCKET']);
+$adapter = new AwsS3Adapter($client, $bucket);
 
 $filesystem = new Filesystem($adapter);
 $filesystem->addPlugin(new AWS_S3_Plugin\PresignedUrl());
@@ -85,5 +87,7 @@ echo $twig->render('index.twig', [
     'lng' => $lng,
     'captures' => $contents,
     'logo' => $logo,
-    '_get' => $_GET
+    '_get' => $_GET,
+    'bucket' => $bucket,
+    'region' => $region,
 ]);

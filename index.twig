@@ -95,8 +95,8 @@
 
               {% for capture in captures if capture.extension in ['jpg'] and (capture.filename starts with 'M' and capture.filename ends with 'P') %}
                 <div class="col-lg-4" style="margin-bottom: 1em;">
-                  <a href="#videoModal" data-toggle="modal" data-video="https://bramon.s3-sa-east-1.amazonaws.com/{{ capture['path'] | replace({'.jpg': ''}) }}">
-                    <img src="https://bramon.s3-sa-east-1.amazonaws.com/{{ capture['path'] }}" class="img img-thumbnail img-responsive" title="{{ capture['filename'] }}">
+                  <a href="#videoModal" data-toggle="modal" data-video="https://{{ bucket }}.s3-{{ region }}.amazonaws.com/{{ capture['path'] | replace({'.jpg': ''}) }}">
+                    <img src="https://{{ bucket }}.s3-{{ region }}.amazonaws.com/{{ capture['path'] }}" class="img img-thumbnail img-responsive" title="{{ capture['filename'] }}">
                   </a>
                   <span>
                   <b>{{ capture['filename'] }}</b>
@@ -118,8 +118,8 @@
 
               {% for capture in captures if capture.extension in ['jpg', 'gif'] and capture.filename ends with 'fits_maxpixel' %}
                 <div class="col-lg-4" style="margin-bottom: 1em;">
-                  <a href="#videoModal" data-toggle="modal" data-video="https://bramon.s3-sa-east-1.amazonaws.com/{{ capture['path'] }}">
-                    <img src="https://bramon.s3-sa-east-1.amazonaws.com/{{ capture['path'] }}" class="img img-thumbnail img-responsive" title="{{ capture['filename'] }}">
+                  <a href="#videoModal" data-toggle="modal" data-video="https://{{ bucket }}.s3-{{ region }}.amazonaws.com/{{ capture['path'] }}">
+                    <img src="https://{{ bucket }}.s3-{{ region }}.amazonaws.com/{{ capture['path'] }}" class="img img-thumbnail img-responsive" title="{{ capture['filename'] }}">
                   </a>
                   <span>
                   <b>{{ capture['filename'] | replace({'.fits_maxpixel': ''}) }}</b>
