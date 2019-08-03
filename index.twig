@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt">
   <head>
-    <title>BRAMON - GMN - Capturas</title>
+    <title>Meteoros</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -88,13 +88,13 @@
           </div>
 
           <div class="col-lg-10">
-            <div class="row">
-              <h3>BRAMON - Fotos</h3>
+            <div class="row set-bramon">
+              <h3>BRAMON</h3>
 
               {% for capture in captures if capture.extension in ['jpg'] and (capture.filename starts with 'M' and capture.filename ends with 'P') %}
                 <div class="col-lg-4" style="margin-bottom: 1em;">
-                  <a href="{{ capture['path'] }}" target="_blank">
-                    <img src="{{ capture['path'] }}" class="img img-thumbnail img-responsive" title="{{ capture['filename'] }}">
+                  <a href="#videoModal" data-toggle="modal" data-video="https://bramon.s3-sa-east-1.amazonaws.com/{{ capture['path'] | replace({'.jpg': ''}) }}">
+                    <img src="https://bramon.s3-sa-east-1.amazonaws.com/{{ capture['path'] }}" class="img img-thumbnail img-responsive" title="{{ capture['filename'] }}">
                   </a>
                   <span>
                   <b>{{ capture['filename'] }}</b>
@@ -107,56 +107,16 @@
               {% endfor %}
             </div>
 
-            <div class="row">
-              <h3>BRAMON - Vídeos</h3>
-
-              {% for capture in captures if capture.extension in ['mp4'] %}
-                <div class="col-lg-4" style="margin-bottom: 1em;">
-                  <video controls width="294" height="199">
-                    <source src="{{ capture['path'] }}" type="video/mp4">
-                  </video>
-                  <span>
-                  <b>{{ capture['filename'] | replace({'.avi': ''}) }}</b>
-                </span>
-                </div>
-              {% else %}
-                <div class="alert alert-warning">
-                  Sem capturas para a data.
-                </div>
-              {% endfor %}
-
-            </div>
-
-            <div class="row">
-              <h3>GMN - Fotos</h3>
+            <div class="row set-gmn">
+              <h3>GMN</h3>
 
               {% for capture in captures if capture.extension in ['jpg', 'gif'] and capture.filename ends with 'fits_maxpixel' %}
                 <div class="col-lg-4" style="margin-bottom: 1em;">
-                  <a href="{{ capture['path'] }}" target="_blank">
-                    <img src="{{ capture['path'] }}" class="img img-thumbnail img-responsive" title="{{ capture['filename'] }}">
+                  <a href="https://bramon.s3-sa-east-1.amazonaws.com/{{ capture['path'] }}" target="_blank">
+                    <img src="https://bramon.s3-sa-east-1.amazonaws.com/{{ capture['path'] }}" class="img img-thumbnail img-responsive" title="{{ capture['filename'] }}">
                   </a>
                   <span>
-                  <b>{{ capture['filename'] }}</b>
-                </span>
-                </div>
-              {% else %}
-                <div class="alert alert-warning">
-                  Sem capturas para a data.
-                </div>
-              {% endfor %}
-
-            </div>
-
-            <div class="row">
-              <h3>GMN - Empilhamentos</h3>
-
-              {% for capture in captures if capture.extension in ['jpg'] and capture.filename ends with 'meteors' %}
-                <div class="col-lg-4" style="margin-bottom: 1em;">
-                  <a href="{{ capture['path'] }}" target="_blank">
-                    <img src="{{ capture['path'] }}" class="img img-thumbnail img-responsive" title="{{ capture['filename'] }}">
-                  </a>
-                  <span>
-                  <b>{{ capture['filename'] }}</b>
+                  <b>{{ capture['filename'] | replace({'.fits_maxpixel': ''}) }}</b>
                 </span>
                 </div>
               {% else %}
@@ -170,11 +130,42 @@
       </main>
     </div>
 
+    <div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="myModalLabel">Vídeo Capture</h4>
+          </div>
+          <div class="modal-body text-center">
+            <iframe id="video_source_0" width="720" height="480" src="" frameborder="0" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script src="//code.jquery.com/jquery-2.2.1.min.js"
             integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00=" 
             crossorigin="anonymous"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" 
             integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" 
             crossorigin="anonymous"></script>
+    <script>
+      $(".set-bramon .col-lg-4 a").on("click", function(e) {
+        e.preventDefault();
+
+        var $this = $(this);
+        var video = new String($this.attr('data-video'));
+        var videoSrc = video.slice(0, -1) + '.mp4';
+
+        $("#videoModal").on('hide.bs.modal', function(){
+          $("#video_source_0").attr('src', '');
+        });
+
+        $("#videoModal").on('show.bs.modal', function(){
+          $("#video_source_0").attr('src', videoSrc);
+        });
+      });
+    </script>
   </body>
 </html>

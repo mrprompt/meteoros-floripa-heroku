@@ -77,12 +77,6 @@ foreach ($_GET['station'] ?? [] as $station) {
     $contents = array_merge($contents, $captures);
 }
 
-$contents = array_map(function ($capture) use ($filesystem) {
-    $capture['path'] = $filesystem->getPresignedUrl($capture['path']);
-
-    return $capture;
-}, $contents);
-
 echo $twig->render('index.twig', [
     'stations' => $stations,
     'cameras' => $cameras,
