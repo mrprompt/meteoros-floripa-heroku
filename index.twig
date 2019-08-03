@@ -112,7 +112,7 @@
 
               {% for capture in captures if capture.extension in ['jpg', 'gif'] and capture.filename ends with 'fits_maxpixel' %}
                 <div class="col-lg-4" style="margin-bottom: 1em;">
-                  <a href="https://bramon.s3-sa-east-1.amazonaws.com/{{ capture['path'] }}" target="_blank">
+                  <a href="#videoModal" data-toggle="modal" data-video="https://bramon.s3-sa-east-1.amazonaws.com/{{ capture['path'] }}">
                     <img src="https://bramon.s3-sa-east-1.amazonaws.com/{{ capture['path'] }}" class="img img-thumbnail img-responsive" title="{{ capture['filename'] }}">
                   </a>
                   <span>
@@ -157,6 +157,21 @@
         var $this = $(this);
         var video = new String($this.attr('data-video'));
         var videoSrc = video.slice(0, -1) + '.mp4';
+
+        $("#videoModal").on('hide.bs.modal', function(){
+          $("#video_source_0").attr('src', '');
+        });
+
+        $("#videoModal").on('show.bs.modal', function(){
+          $("#video_source_0").attr('src', videoSrc);
+        });
+      });
+
+      $(".set-gmn .col-lg-4 a").on("click", function(e) {
+        e.preventDefault();
+
+        var $this = $(this);
+        var videoSrc = new String($this.attr('data-video'));
 
         $("#videoModal").on('hide.bs.modal', function(){
           $("#video_source_0").attr('src', '');
