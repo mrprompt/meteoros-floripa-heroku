@@ -9,9 +9,8 @@
     <meta name="keywords" content="meteor, meteoros, bramon, brazilian, meteor, observation, network, gmn, global">
     <meta name="author" content="Thiago Paes - mrprompt (at) gmail.com">
     <meta property="og:locale" content="pt_BR">
-    <meta property="og:url" content="https://meteoros.mrprompt.com.br">
-    <meta property="og:title" content="BRAMON - GMN - Capturas">
-    <meta property="og:site_name" content="BRAMON - GMN - Capturas">
+    <meta property="og:title" content="BRAMON & GMN - Capturas">
+    <meta property="og:site_name" content="BRAMON & GMN - Capturas">
     <meta property="og:description" content="Listagem de capturas feitas pelas estações dos projetos BRAMON e GMN.">
     <meta property="og:image" content="{{ logo }}">
     <meta property="og:image:type" content="image/png">
@@ -69,7 +68,7 @@
             <form method="GET" id="searchForm" class="form" style="margin-top: 25px">
               <div class="form-group">
                 <label for="data">Data da captura</label>
-                <input type="date" name="date" id="date" value="{{ _get['date'] | date('Y-m-d') }}" required="required" class="form-control">
+                <input type="date" name="date" id="date" value="{{ _get['date'] ?? ("now" | date_modify("-1 day") | date('Y-m-d')) }}" required="required" class="form-control">
               </div>
 
               <h5>Estações</h5>
@@ -80,6 +79,13 @@
                 <label for="station_{{ station }}">{{ station }}</label>
               </div>
               {% endfor %}
+
+              <hr>
+
+              <div class="form-group" style="margin-bottom: .2em;">
+                <input type="checkbox" id="selectAll" name="select_all" value="1" {{ _get['select_all'] ? 'checked="checked"' : '' }}>
+                <label for="selectAll">Todas</label>
+              </div>
 
               <div class="form-group">
                 <input type="submit" value="Enviar" class="btn btn-default">
@@ -188,6 +194,10 @@
         $("#videoModal").on('show.bs.modal', function(){
           $("#video_source_0").attr('src', videoSrc);
         });
+      });
+
+      $("#selectAll").click(function(){
+        $("input[type=checkbox]").prop('checked', $(this).prop('checked'));
       });
     </script>
   </body>
