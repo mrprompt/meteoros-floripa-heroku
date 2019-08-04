@@ -164,7 +164,7 @@
             <h4 class="modal-title" id="myModalLabel">Filtro</h4>
           </div>
           <div class="modal-body">
-            <form method="GET" id="searchForm" class="form" style="margin-top: 25px">
+            <form method="GET" id="searchForm" class="form">
               <div class="form-group">
                 <label for="data">Data da captura</label>
                 <input type="date" name="date" id="date" value="{{ _get['date'] ?? ("now" | date_modify("-1 day") | date('Y-m-d')) }}" required="required" class="form-control">
@@ -181,14 +181,12 @@
               {% endfor %}
               </div>
 
-              <hr class="clearfix">
-
               <div class="form-group" style="margin-bottom: .2em;">
                 <input type="checkbox" id="selectAll" name="select_all" value="1" {{ _get['select_all'] ? 'checked="checked"' : '' }}>
                 <label for="selectAll">Todas</label>
               </div>
 
-              <div class="form-group">
+              <div class="form-group text-right">
                 <input type="submit" value="Enviar" class="btn btn-default">
               </div>
             </form>
