@@ -8,6 +8,7 @@
     <meta name="description" content="Listagem de capturas feitas pelas estações dos projetos BRAMON e GMN.">
     <meta name="keywords" content="meteor, meteoros, bramon, brazilian, meteor, observation, network, gmn, global">
     <meta name="author" content="Thiago Paes - mrprompt (at) gmail.com">
+
     <meta property="og:locale" content="pt_BR">
     <meta property="og:title" content="BRAMON & GMN - Capturas">
     <meta property="og:site_name" content="BRAMON & GMN - Capturas">
@@ -18,10 +19,40 @@
     <meta property="og:image:height" content="200">
     <meta property="og:type" content="website">
 
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
+          crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
+          integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r"
+          crossorigin="anonymous">
+
+    <style>
+      body {
+        padding-top: 70px;
+      }
+    </style>
   </head>
   <body>
+    <nav class="navbar navbar-inverse navbar-static-top navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Navegação</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">Capturas</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right hidden-xs">
+            <li><a href="#" title="Filtro de estações" data-toggle="modal" data-target="#filterModal"><i class="glyphicon glyphicon-search"></i> <span class="visible-xs">Filtro</span></a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
     <div class="container">
       <header style="margin-bottom: .5em;">
         <div class="row">
@@ -63,83 +94,50 @@
       </header>
 
       <main role="main">
-        <div class="row">
-          <div class="col-lg-2">
-            <form method="GET" id="searchForm" class="form" style="margin-top: 25px">
-              <div class="form-group">
-                <label for="data">Data da captura</label>
-                <input type="date" name="date" id="date" value="{{ _get['date'] ?? ("now" | date_modify("-1 day") | date('Y-m-d')) }}" required="required" class="form-control">
-              </div>
-
-              <h5>Estações</h5>
-
-              {% for station in stations %}
-              <div class="form-group" style="margin-bottom: .2em;">
-                <input type="checkbox" name="station[]" id="station_{{ station }}" value="{{ station }}" {{ station in _get['station'] ? 'checked="checked"' : '' }}>
-                <label for="station_{{ station }}">{{ station }}</label>
-              </div>
-              {% endfor %}
-
-              <hr>
-
-              <div class="form-group" style="margin-bottom: .2em;">
-                <input type="checkbox" id="selectAll" name="select_all" value="1" {{ _get['select_all'] ? 'checked="checked"' : '' }}>
-                <label for="selectAll">Todas</label>
-              </div>
-
-              <div class="form-group">
-                <input type="submit" value="Enviar" class="btn btn-default">
-              </div>
-            </form>
+        <div class="row set-bramon">
+          <div class="col-lg-12">
+            <h3>BRAMON</h3>
           </div>
 
-          <div class="col-lg-10">
-            <div class="row set-bramon">
-              <div class="col-lg-12">
-                <h3>BRAMON</h3>
-              </div>
-
-              {% for capture in captures if capture.extension in ['jpg'] and (capture.filename starts with 'M' and capture.filename ends with 'P') %}
-                <div class="col-lg-4" style="margin-bottom: 1em;">
-                  <a href="#videoModal" data-toggle="modal" data-video="https://{{ bucket }}.s3-{{ region }}.amazonaws.com/{{ capture['path'] | replace({'.jpg': ''}) }}">
-                    <img src="https://{{ bucket }}.s3-{{ region }}.amazonaws.com/{{ capture['path'] }}" class="img img-thumbnail img-responsive" title="{{ capture['filename'] }}">
-                  </a>
-                  <span>
-                  <b>{{ capture['filename'] }}</b>
-                </span>
-                </div>
-              {% else %}
-              <div class="col-lg-12">
-                <div class="alert alert-warning">
-                  Sem capturas para a data.
-                </div>
-              </div>
-              {% endfor %}
+          {% for capture in captures if capture.extension in ['jpg'] and (capture.filename starts with 'M' and capture.filename ends with 'P') %}
+            <div class="col-lg-4" style="margin-bottom: 1em;">
+              <a href="#videoModal" data-toggle="modal" data-video="https://{{ bucket }}.s3-{{ region }}.amazonaws.com/{{ capture['path'] | replace({'.jpg': ''}) }}">
+                <img src="https://{{ bucket }}.s3-{{ region }}.amazonaws.com/{{ capture['path'] }}" class="img img-thumbnail img-responsive" title="{{ capture['filename'] }}">
+              </a>
+              <span>
+              <b>{{ capture['filename'] }}</b>
+            </span>
             </div>
-
-            <div class="row set-gmn">
-              <div class="col-lg-12">
-                <h3>GMN</h3>
-              </div>
-
-              {% for capture in captures if capture.extension in ['jpg', 'gif'] and capture.filename ends with 'fits_maxpixel' %}
-                <div class="col-lg-4" style="margin-bottom: 1em;">
-                  <a href="#videoModal" data-toggle="modal" data-video="https://{{ bucket }}.s3-{{ region }}.amazonaws.com/{{ capture['path'] }}">
-                    <img src="https://{{ bucket }}.s3-{{ region }}.amazonaws.com/{{ capture['path'] }}" class="img img-thumbnail img-responsive" title="{{ capture['filename'] }}">
-                  </a>
-                  <span>
-                  <b>{{ capture['filename'] | replace({'.fits_maxpixel': ''}) }}</b>
-                </span>
-                </div>
-              {% else %}
-              <div class="col-lg-12">
-                <div class="alert alert-warning">
-                  Sem capturas para a data.
-                </div>
-              </div>
-              {% endfor %}
+          {% else %}
+          <div class="col-lg-12">
+            <div class="alert alert-warning">
+              Sem capturas para a data.
             </div>
           </div>
+          {% endfor %}
+        </div>
+
+        <div class="row set-gmn">
+          <div class="col-lg-12">
+            <h3>GMN</h3>
+          </div>
+
+          {% for capture in captures if capture.extension in ['jpg', 'gif'] and capture.filename ends with 'fits_maxpixel' %}
+            <div class="col-lg-4" style="margin-bottom: 1em;">
+              <a href="#videoModal" data-toggle="modal" data-video="https://{{ bucket }}.s3-{{ region }}.amazonaws.com/{{ capture['path'] }}">
+                <img src="https://{{ bucket }}.s3-{{ region }}.amazonaws.com/{{ capture['path'] }}" class="img img-thumbnail img-responsive" title="{{ capture['filename'] }}">
+              </a>
+              <span>
+              <b>{{ capture['filename'] | replace({'.fits_maxpixel': ''}) }}</b>
+            </span>
+            </div>
+          {% else %}
+          <div class="col-lg-12">
+            <div class="alert alert-warning">
+              Sem capturas para a data.
+            </div>
+          </div>
+          {% endfor %}
         </div>
       </main>
     </div>
@@ -158,12 +156,54 @@
       </div>
     </div>
 
+    <div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Fechar</span></button>
+            <h4 class="modal-title" id="myModalLabel">Filtro</h4>
+          </div>
+          <div class="modal-body">
+            <form method="GET" id="searchForm" class="form" style="margin-top: 25px">
+              <div class="form-group">
+                <label for="data">Data da captura</label>
+                <input type="date" name="date" id="date" value="{{ _get['date'] ?? ("now" | date_modify("-1 day") | date('Y-m-d')) }}" required="required" class="form-control">
+              </div>
+
+              <h5>Estações</h5>
+
+              <div class="row">
+              {% for station in stations %}
+                <div class="form-group col-lg-2" style="margin-bottom: .2em;">
+                  <input type="checkbox" name="station[]" id="station_{{ station }}" value="{{ station }}" {{ station in _get['station'] ? 'checked="checked"' : '' }}>
+                  <label for="station_{{ station }}">{{ station }}</label>
+                </div>
+              {% endfor %}
+              </div>
+
+              <hr class="clearfix">
+
+              <div class="form-group" style="margin-bottom: .2em;">
+                <input type="checkbox" id="selectAll" name="select_all" value="1" {{ _get['select_all'] ? 'checked="checked"' : '' }}>
+                <label for="selectAll">Todas</label>
+              </div>
+
+              <div class="form-group">
+                <input type="submit" value="Enviar" class="btn btn-default">
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script src="//code.jquery.com/jquery-2.2.1.min.js"
             integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00=" 
             crossorigin="anonymous"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" 
             integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" 
             crossorigin="anonymous"></script>
+
     <script>
       $(".set-bramon .col-lg-4 a").on("click", function(e) {
         e.preventDefault();
