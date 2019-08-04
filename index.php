@@ -7,15 +7,17 @@
 require __DIR__ . '/vendor/autoload.php';
 
 use Aws\S3\S3Client;
-use Etime\Flysystem\Plugin\AWS_S3 as AWS_S3_Plugin;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
 use League\Flysystem\Filesystem;
 use Symfony\Component\Dotenv\Dotenv;
+use Symfony\Component\Dotenv\Exception\PathException;
+use Twig\Loader\FilesystemLoader as TwigFilesystem;
+use Twig\Environment as TwigEnvironment;
 
 try {
     $dotenv = new Dotenv();
     $dotenv->load(__DIR__.'/.env');
-} catch (\Symfony\Component\Dotenv\Exception\PathException $ex) {
+} catch (PathException $ex) {
     // none :)
 }
 
@@ -38,14 +40,7 @@ $client = new S3Client([
 ]);
 
 $adapter = new AwsS3Adapter($client, $bucket);
-
 $filesystem = new Filesystem($adapter);
-$filesystem->addPlugin(new AWS_S3_Plugin\PresignedUrl());
-
-$loader = new \Twig\Loader\FilesystemLoader(__DIR__);
-
-$twig = new \Twig\Environment($loader, ['debug' => true]);
-$twig->addExtension(new \Twig\Extension\DebugExtension());
 
 $recursive = true;
 $path = '/';
@@ -79,15 +74,18 @@ foreach ($_GET['station'] ?? [] as $station) {
     $contents = array_merge($contents, $captures);
 }
 
+$loader = new TwigFilesystem(__DIR__);
+$twig = new TwigEnvironment($loader);
+
 echo $twig->render('index.twig', [
-    'stations' => $stations,
-    'cameras' => $cameras,
-    'lenses' => $lenses,
-    'lat' => $lat,
-    'lng' => $lng,
-    'captures' => $contents,
-    'logo' => $logo,
-    '_get' => $_GET,
-    'bucket' => $bucket,
-    'region' => $region,
+    'stations'  => $stations,
+    'cameras'   => $cameras,
+    'lenses'    => $lenses,
+    'lat'       => $lat,
+    'lng'       => $lng,
+    'captures'  => $contents,
+    'logo'      => $logo,
+    'bucket'    => $bucket,
+    'region'    => $region,
+    '_get'      => $_GET,
 ]);

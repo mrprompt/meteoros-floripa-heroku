@@ -69,15 +69,15 @@
             <form method="GET" id="searchForm" class="form" style="margin-top: 25px">
               <div class="form-group">
                 <label for="data">Data da captura</label>
-                <input type="date" name="date" id="date" value="{{ _get['date'] }}" required="required" class="form-control">
+                <input type="date" name="date" id="date" value="{{ _get['date'] | date('Y-m-d') }}" required="required" class="form-control">
               </div>
 
               <h5>Estações</h5>
 
               {% for station in stations %}
               <div class="form-group" style="margin-bottom: .2em;">
-                <label for="station_{{ station }}">{{ station }}</label>
                 <input type="checkbox" name="station[]" id="station_{{ station }}" value="{{ station }}" {{ station in _get['station'] ? 'checked="checked"' : '' }}>
+                <label for="station_{{ station }}">{{ station }}</label>
               </div>
               {% endfor %}
 
