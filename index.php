@@ -24,8 +24,6 @@ try {
 $stations = explode(',', $_ENV['STATIONS']);
 $cameras = explode(',', $_ENV['CAMERAS']);
 $lenses = explode(',', $_ENV['LENS']);
-$lat = $_ENV['LAT'];
-$lng = $_ENV['LNG'];
 $logo = $_ENV['LOGO'];
 $bucket = $_ENV['AWS_BUCKET'];
 $region = $_ENV['AWS_DEFAULT_REGION'];
@@ -81,8 +79,6 @@ echo $twig->render('index.twig', [
     'stations'  => $stations,
     'cameras'   => $cameras,
     'lenses'    => $lenses,
-    'lat'       => $lat,
-    'lng'       => $lng,
     'captures'  => $contents,
     'logo'      => $logo,
     'bucket'    => $bucket,
