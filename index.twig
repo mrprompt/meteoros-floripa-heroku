@@ -55,24 +55,28 @@
             <a href="./"><img src="{{ logo }}" alt="Logo" class="img-rounded" style="height: 100px !important;"></a>
           </div>
 
-          <div class="col-lg-4">
+          <div class="col-lg-3">
             <dl class="dl-horizontal">
               <dt>Câmeras:</dt>
               {%  for camera in cameras %}
               <dd>{{  camera }}</dd>
               {% endfor %}
-
+            </dl>
+          </div>
+          <div class="col-lg-5">
+            <dl class="dl-horizontal">
               <dt>Lentes:</dt>
               {% for lens in lenses %}
-              <dd>{{ lens }}</dd>
+                <dd>{{ lens }}</dd>
               {% endfor %}
-
+            </dl>
+          </div>
+          <div class="col-lg-3">
+            <dl class="dl-horizontal">
               <dt>Projetos:</dt>
               <dd><a href="http://bramonmeteor.org/bramon/" title="Brazilian Meteor Observation Network" target="_blank">BRAMON</a></dd>
               <dd><a href="https://globalmeteornetwork.org" title="Global Meteor Network" target="_blank">GMN</a></dd>
             </dl>
-          </div>
-          <div class="col-lg-7">
           </div>
         </div>
       </header>
