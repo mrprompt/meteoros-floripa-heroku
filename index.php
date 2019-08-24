@@ -24,13 +24,12 @@ try {
 $stations_bramon = explode(',', $_ENV['STATIONS_BRAMON']);
 $stations_gmn = explode(',', $_ENV['STATIONS_GMN']);
 $bucket = $_ENV['AWS_BUCKET'];
-$region = $_ENV['AWS_DEFAULT_REGION'];
 $credentials = [
     'credentials' => [
         'key'    => $_ENV['AWS_ACCESS_KEY_ID'],
         'secret' => $_ENV['AWS_SECRET_ACCESS_KEY'],
     ],
-    'region' => $region,
+    'region' => $_ENV['AWS_DEFAULT_REGION'],
     'version' => 'latest',
 ];
 
@@ -75,7 +74,6 @@ foreach ($_GET['station'] ?? array_merge($stations_bramon, $stations_gmn) as $st
 echo $twig->render('index.twig', [
     'captures'          => $contents,
     'bucket'            => $bucket,
-    'region'            => $region,
     '_get'              => $_GET,
     'stations_bramon'   => $stations_bramon,
     'stations_gmn'      => $stations_gmn,
