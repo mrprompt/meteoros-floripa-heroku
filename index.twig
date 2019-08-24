@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt">
   <head>
-    <title>Meteoros</title>
+    <title>Meteoros Floripa</title>
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,14 +11,17 @@
     <meta name="author" content="Thiago Paes - mrprompt (at) gmail.com">
 
     <meta property="og:locale" content="pt_BR">
-    <meta property="og:title" content="BRAMON & GMN - Capturas">
-    <meta property="og:site_name" content="BRAMON & GMN - Capturas">
+    <meta property="og:title" content="Meteoros Floripa - BRAMON & GMN - Capturas">
+    <meta property="og:site_name" content="Meteoros Floripa - BRAMON & GMN - Capturas">
     <meta property="og:description" content="Listagem de capturas feitas pelas estações dos projetos BRAMON e GMN.">
-    <meta property="og:image" content="{{ logo }}">
+    <meta property="og:image" content="logo.png">
     <meta property="og:image:type" content="image/png">
     <meta property="og:image:width" content="200">
     <meta property="og:image:height" content="200">
     <meta property="og:type" content="website">
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
 
     <link rel="stylesheet"
           href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
@@ -59,13 +62,13 @@
       <header style="margin-bottom: .5em;" class="hidden-xs">
         <div class="row">
           <div class="col-lg-1">
-            <a href="./"><img src="{{ logo }}" alt="Logo" class="img-rounded" style="height: 100px !important;"></a>
+            <a href="./"><img src="./logo.png" alt="Logo" class="img-rounded" style="height: 100px !important;"></a>
           </div>
 
           <div class="col-lg-3">
             <dl class="dl-horizontal">
               <dt>Câmeras:</dt>
-              {%  for camera in cameras %}
+              {%  for camera in ["SAMSUNG SCB-2000"] %}
               <dd>{{  camera }}</dd>
               {% endfor %}
             </dl>
@@ -73,7 +76,7 @@
           <div class="col-lg-5">
             <dl class="dl-horizontal">
               <dt>Lentes:</dt>
-              {% for lens in lenses %}
+              {% for lens in ["Megapixel 4mm F1.0", "Fujimon 2.8mm-8mm F0.95"] %}
                 <dd>{{ lens }}</dd>
               {% endfor %}
             </dl>
@@ -169,16 +172,31 @@
                 <input type="date" name="date" id="date" value="{{ _get['date'] ?? ("now" | date_modify("-1 day") | date('Y-m-d')) }}" required="required" class="form-control">
               </div>
 
-              <h5>Estações</h5>
+              <div class="form-group">
+                <fieldset>
+                  <legend>Estações BRAMON</legend>
 
-              <div class="row">
-              {% for station in stations %}
-                <div class="form-group col-lg-2" style="margin-bottom: .2em;">
-                  <input type="checkbox" name="station[]" id="station_{{ station }}" value="{{ station }}" {{ station in _get['station'] ? 'checked="checked"' : '' }}>
-                  <label for="station_{{ station }}">{{ station }}</label>
-                </div>
-              {% endfor %}
+                  {% for station in stations_bramon %}
+                    <div class="col-lg-2 col-xs-4" style="margin-bottom: .2em;">
+                      <input type="checkbox" name="station[]" id="station_{{ station }}" value="{{ station }}" {{ station in _get['station'] ? 'checked="checked"' : '' }}>
+                      <label for="station_{{ station }}">{{ station }}</label>
+                    </div>
+                  {% endfor %}
+                </fieldset>
+
+                <fieldset>
+                  <legend>Estações GMN</legend>
+
+                  {% for station in stations_gmn %}
+                    <div class="col-lg-2 col-xs-4" style="margin-bottom: .2em;">
+                      <input type="checkbox" name="station[]" id="station_{{ station }}" value="{{ station }}" {{ station in _get['station'] ? 'checked="checked"' : '' }}>
+                      <label for="station_{{ station }}">{{ station }}</label>
+                    </div>
+                  {% endfor %}
+                </fieldset>
               </div>
+
+              <hr>
 
               <div class="form-group" style="margin-bottom: .2em;">
                 <input type="checkbox" id="selectAll" name="select_all" value="1" {{ _get['select_all'] ? 'checked="checked"' : '' }}>
@@ -200,7 +218,6 @@
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" 
             integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" 
             crossorigin="anonymous"></script>
-
     <script>
       $(".set-bramon .col-lg-4 a").on("click", function(e) {
         e.preventDefault();

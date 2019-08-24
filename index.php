@@ -21,47 +21,47 @@ try {
     // none :)
 }
 
-$stations = explode(',', $_ENV['STATIONS']);
-$cameras = explode(',', $_ENV['CAMERAS']);
-$lenses = explode(',', $_ENV['LENS']);
-$logo = $_ENV['LOGO'];
+$stations_bramon = explode(',', $_ENV['STATIONS_BRAMON']);
+$stations_gmn = explode(',', $_ENV['STATIONS_GMN']);
 $bucket = $_ENV['AWS_BUCKET'];
 $region = $_ENV['AWS_DEFAULT_REGION'];
-
-$client = new S3Client([
+$credentials = [
     'credentials' => [
         'key'    => $_ENV['AWS_ACCESS_KEY_ID'],
         'secret' => $_ENV['AWS_SECRET_ACCESS_KEY'],
     ],
     'region' => $region,
     'version' => 'latest',
-]);
+];
 
+$client = new S3Client($credentials);
 $adapter = new AwsS3Adapter($client, $bucket);
 $filesystem = new Filesystem($adapter);
+$loader = new TwigFilesystem(__DIR__);
+$twig = new TwigEnvironment($loader);
 
 $recursive = true;
 $path = '/';
 $contents = [];
 
-foreach ($_GET['station'] ?? [] as $station) {
-    $date = DateTime::createFromFormat('Y-m-d', $_GET['date']);
+foreach ($_GET['station'] ?? array_merge($stations_bramon, $stations_gmn) as $station) {
+    $date = DateTime::createFromFormat('Y-m-d', $_GET['date'] ?? (new DateTime())->modify('-1 day')->format('Y-m-d'));
 
     // BRAMON
     if (preg_match('/^[[:alpha:]]{3,4}[[:digit:]]{1,3}$/', $station)) {
-        $path = sprintf("%s/%s/%s/%s/", $station, $date->format('Y'), $date->format('Ym'), $date->format('Ymd'));
+        $path = sprintf("%s/%s/%s/%s/%s/", 'bramon', $station, $date->format('Y'), $date->format('Ym'), $date->format('Ymd'));
     }
 
     // GMN
     if (preg_match('/^[[:alpha:]]{2}[[:digit:]]{4,}$/', $station)) {
-        $path = sprintf("%s/", $station);
+        $path = sprintf("%s/%s/", 'gmn', $station);
     }
 
     $captures = $filesystem->listContents($path, $recursive);
 
     // GMN
     if (preg_match('/^[[:alpha:]]{2}[[:digit:]]{4,}$/', $station)) {
-        $er = sprintf("/^%s\/%s_%s_/", $station, $station, $date->format('Ymd'));
+        $er = sprintf("/^%s\/%s\/%s_%s_/", 'gmn', $station, $station, $date->format('Ymd'));
         $captures = array_filter($captures, function ($capture) use ($er) {
             if (preg_match($er, $capture['dirname'])) {
                 return $capture;
@@ -72,16 +72,11 @@ foreach ($_GET['station'] ?? [] as $station) {
     $contents = array_merge($contents, $captures);
 }
 
-$loader = new TwigFilesystem(__DIR__);
-$twig = new TwigEnvironment($loader);
-
 echo $twig->render('index.twig', [
-    'stations'  => $stations,
-    'cameras'   => $cameras,
-    'lenses'    => $lenses,
-    'captures'  => $contents,
-    'logo'      => $logo,
-    'bucket'    => $bucket,
-    'region'    => $region,
-    '_get'      => $_GET,
+    'captures'          => $contents,
+    'bucket'            => $bucket,
+    'region'            => $region,
+    '_get'              => $_GET,
+    'stations_bramon'   => $stations_bramon,
+    'stations_gmn'      => $stations_gmn,
 ]);

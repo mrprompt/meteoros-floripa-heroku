@@ -18,23 +18,7 @@
     },
     "AWS_BUCKET": {
       "description": "AWS_BUCKET",
-      "value": ""
-    },
-    "STATIONS": {
-      "description": "STATIONS",
-      "value": ""
-    },
-    "CAMERAS": {
-      "description": "CAMERAS",
-      "value": ""
-    },
-    "LENS": {
-      "description": "LENS",
-      "value": ""
-    },
-    "LOGO": {
-      "description": "LOGO",
-      "value": ""
+      "value": "meteoros"
     }
   }
 }
