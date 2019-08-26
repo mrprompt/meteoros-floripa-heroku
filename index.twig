@@ -92,50 +92,53 @@
       </header>
 
       <main role="main">
-        <div class="row set-bramon">
-          <div class="col-lg-12">
-            <h3>BRAMON</h3>
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li role="presentation" class="active">
+            <a data-toggle="tab" href="#bramon" role="tab" aria-controls="bramon">BRAMON</a>
+          </li>
+          <li role="presentation">
+            <a class="nav-link" id="gmn-tab" data-toggle="tab" href="#gmn" role="tab" aria-controls="gmn">GMN</a>
+          </li>
+        </ul>
+
+        <div class="tab-content" id="myTabContent">
+          <div class="tab-pane active" id="bramon" role="tabpanel">
+            <div class="row set-bramon">
+              {% for capture in captures if capture.extension in ['jpg'] and (capture.filename starts with 'M' and capture.filename ends with 'P') %}
+                <div class="col-lg-4" style="margin-bottom: 1em;">
+                  <a href="#videoModal" data-toggle="modal" data-video="https://{{ bucket }}.s3.amazonaws.com/{{ capture['path'] | replace({'.jpg': ''}) }}">
+                    <img src="https://{{ bucket }}.s3.amazonaws.com/{{ capture['path'] }}" class="img img-thumbnail img-responsive" title="{{ capture['filename'] }}">
+                  </a>
+                  <span><b>{{ capture['filename'] }}</b></span>
+                </div>
+              {% else %}
+                <div class="col-lg-12">
+                  <div class="alert alert-warning">
+                    Sem capturas para a data.
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
           </div>
 
-          {% for capture in captures if capture.extension in ['jpg'] and (capture.filename starts with 'M' and capture.filename ends with 'P') %}
-            <div class="col-lg-4" style="margin-bottom: 1em;">
-              <a href="#videoModal" data-toggle="modal" data-video="https://{{ bucket }}.s3.amazonaws.com/{{ capture['path'] | replace({'.jpg': ''}) }}">
-                <img src="https://{{ bucket }}.s3.amazonaws.com/{{ capture['path'] }}" class="img img-thumbnail img-responsive" title="{{ capture['filename'] }}">
-              </a>
-              <span>
-              <b>{{ capture['filename'] }}</b>
-            </span>
-            </div>
-          {% else %}
-          <div class="col-lg-12">
-            <div class="alert alert-warning">
-              Sem capturas para a data.
-            </div>
-          </div>
-          {% endfor %}
-        </div>
-
-        <div class="row set-gmn">
-          <div class="col-lg-12">
-            <h3>GMN</h3>
-          </div>
-
-          {% for capture in captures if capture.extension in ['jpg', 'gif'] and capture.filename ends with 'fits_maxpixel' %}
-            <div class="col-lg-4" style="margin-bottom: 1em;">
-              <a href="#videoModal" data-toggle="modal" data-video="https://{{ bucket }}.s3.amazonaws.com/{{ capture['path'] }}">
-                <img src="https://{{ bucket }}.s3.amazonaws.com/{{ capture['path'] }}" class="img img-thumbnail img-responsive" title="{{ capture['filename'] }}">
-              </a>
-              <span>
-              <b>{{ capture['filename'] | replace({'.fits_maxpixel': ''}) }}</b>
-            </span>
-            </div>
-          {% else %}
-          <div class="col-lg-12">
-            <div class="alert alert-warning">
-              Sem capturas para a data.
+          <div class="tab-pane" id="gmn" role="tabpanel">
+            <div class="row set-gmn">
+              {% for capture in captures if capture.extension in ['jpg', 'gif'] and capture.filename ends with 'fits_maxpixel' %}
+                <div class="col-lg-4" style="margin-bottom: 1em;">
+                  <a href="#videoModal" data-toggle="modal" data-video="https://{{ bucket }}.s3.amazonaws.com/{{ capture['path'] }}">
+                    <img src="https://{{ bucket }}.s3.amazonaws.com/{{ capture['path'] }}" class="img img-thumbnail img-responsive" title="{{ capture['filename'] }}">
+                  </a>
+                  <span><b>{{ capture['filename'] | replace({'.fits_maxpixel': ''}) }}</b></span>
+                </div>
+              {% else %}
+                <div class="col-lg-12">
+                  <div class="alert alert-warning">
+                    Sem capturas para a data.
+                  </div>
+                </div>
+              {% endfor %}
             </div>
           </div>
-          {% endfor %}
         </div>
       </main>
     </div>
@@ -168,8 +171,13 @@
           <div class="modal-body">
             <form method="GET" id="searchForm" class="form">
               <div class="form-group">
-                <label for="data">Data da captura</label>
-                <input type="date" name="date" id="date" value="{{ _get['date'] ?? ("now" | date_modify("-1 day") | date('Y-m-d')) }}" required="required" class="form-control">
+                <label for="date_start">Data inicial</label>
+                <input type="date" name="date_start" id="date_start" value="{{ _get['date_start'] ?? ("now" | date_modify("-7 day") | date('Y-m-d')) }}" required="required" class="form-control">
+              </div>
+
+              <div class="form-group">
+                <label for="date_end">Data final</label>
+                <input type="date" name="date_end" id="date_end" value="{{ _get['date_end'] ?? ("now" | date('Y-m-d')) }}" required="required" class="form-control">
               </div>
 
               <div class="form-group">

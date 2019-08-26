@@ -43,32 +43,55 @@ $recursive = true;
 $path = '/';
 $contents = [];
 
-foreach ($_GET['station'] ?? array_merge($stations_bramon, $stations_gmn) as $station) {
-    $date = DateTime::createFromFormat('Y-m-d', $_GET['date'] ?? (new DateTime())->modify('-1 day')->format('Y-m-d'));
+function getDatesFromRange(string $start, string $end, string $format = 'Y-m-d'): array
+{
+    $dates = [];
+    $interval = new DateInterval('P1D');
+    $realEnd = new DateTime($end);
+    $realEnd->add($interval);
 
-    // BRAMON
-    if (preg_match('/^[[:alpha:]]{3,4}[[:digit:]]{1,3}$/', $station)) {
-        $path = sprintf("%s/%s/%s/%s/%s/", 'bramon', $station, $date->format('Y'), $date->format('Ym'), $date->format('Ymd'));
+    $period = new DatePeriod(new DateTime($start), $interval, $realEnd);
+
+    foreach($period as $date) {
+        $dates[] = $date->format($format);
     }
 
-    // GMN
-    if (preg_match('/^[[:alpha:]]{2}[[:digit:]]{4,}$/', $station)) {
-        $path = sprintf("%s/%s/", 'gmn', $station);
+    return $dates;
+}
+
+$date_start = $_GET['date_start'] ?? (new DateTime())->modify('-1 day')->format('Y-m-d');
+$date_end = $_GET['date_end'] ?? (new DateTime())->modify('-0 day')->format('Y-m-d');
+$dates = getDatesFromRange($date_start, $date_end);
+$stations_merged = array_merge($stations_bramon, $stations_gmn);
+
+foreach ($_GET['station'] ?? $stations_merged as $station) {
+    foreach ($dates as $date) {
+        $date = DateTime::createFromFormat('Y-m-d', $date);
+
+        // BRAMON
+        if (preg_match('/^[[:alpha:]]{3,4}[[:digit:]]{1,3}$/', $station)) {
+            $path = sprintf("%s/%s/%s/%s/%s/", 'bramon', $station, $date->format('Y'), $date->format('Ym'), $date->format('Ymd'));
+        }
+
+        // GMN
+        if (preg_match('/^[[:alpha:]]{2}[[:digit:]]{4,}$/', $station)) {
+            $path = sprintf("%s/%s/", 'gmn', $station);
+        }
+
+        $captures = $filesystem->listContents($path, $recursive);
+
+        // GMN
+        if (preg_match('/^[[:alpha:]]{2}[[:digit:]]{4,}$/', $station)) {
+            $er = sprintf("/^%s\/%s\/%s_%s_/", 'gmn', $station, $station, $date->format('Ymd'));
+            $captures = array_filter($captures, function ($capture) use ($er) {
+                if (preg_match($er, $capture['dirname'])) {
+                    return $capture;
+                }
+            });
+        }
+
+        $contents = array_merge($contents, $captures);
     }
-
-    $captures = $filesystem->listContents($path, $recursive);
-
-    // GMN
-    if (preg_match('/^[[:alpha:]]{2}[[:digit:]]{4,}$/', $station)) {
-        $er = sprintf("/^%s\/%s\/%s_%s_/", 'gmn', $station, $station, $date->format('Ymd'));
-        $captures = array_filter($captures, function ($capture) use ($er) {
-            if (preg_match($er, $capture['dirname'])) {
-                return $capture;
-            }
-        });
-    }
-
-    $contents = array_merge($contents, $captures);
 }
 
 echo $twig->render('index.twig', [
