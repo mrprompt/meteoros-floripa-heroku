@@ -170,17 +170,17 @@
           </div>
           <div class="modal-body">
             <form method="GET" id="searchForm" class="form">
-              <div class="form-group">
+              <div class="form-group col-lg-6 col-xs-12">
                 <label for="date_start">Data inicial</label>
                 <input type="date" name="date_start" id="date_start" value="{{ _get['date_start'] ?? ("now" | date_modify("-7 day") | date('Y-m-d')) }}" required="required" class="form-control">
               </div>
 
-              <div class="form-group">
+              <div class="form-group col-lg-6 col-xs-12">
                 <label for="date_end">Data final</label>
                 <input type="date" name="date_end" id="date_end" value="{{ _get['date_end'] ?? ("now" | date('Y-m-d')) }}" required="required" class="form-control">
               </div>
 
-              <div class="form-group">
+              <div class="form-group col-lg-12 col-xs-12">
                 <fieldset>
                   <legend>Estações BRAMON</legend>
 
@@ -206,7 +206,7 @@
 
               <hr>
 
-              <div class="form-group" style="margin-bottom: .2em;">
+              <div class="form-group" style="margin-bottom: .2em; margin-left: 2em">
                 <input type="checkbox" id="selectAll" name="select_all" value="1" {{ _get['select_all'] ? 'checked="checked"' : '' }}>
                 <label for="selectAll">Todas</label>
               </div>

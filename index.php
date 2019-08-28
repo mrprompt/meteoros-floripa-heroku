@@ -62,9 +62,8 @@ function getDatesFromRange(string $start, string $end, string $format = 'Y-m-d')
 $date_start = $_GET['date_start'] ?? (new DateTime())->modify('-1 day')->format('Y-m-d');
 $date_end = $_GET['date_end'] ?? (new DateTime())->modify('-0 day')->format('Y-m-d');
 $dates = getDatesFromRange($date_start, $date_end);
-$stations_merged = array_merge($stations_bramon, $stations_gmn);
 
-foreach ($_GET['station'] ?? $stations_merged as $station) {
+foreach ($_GET['station'] ?? [] as $station) {
     foreach ($dates as $date) {
         $date = DateTime::createFromFormat('Y-m-d', $date);
 
